@@ -279,7 +279,35 @@ def show_venue(venue_id):
   #   "upcoming_shows_count": 1,
   # }
   # data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
+  data = {}
+  venue = Venue.query.filter(Venue.id == venue_id).one_or_none()
 
+  if venue is None:
+    abort(404)
+
+  data = {
+    "id": venue.id,
+    "name": venue.name,
+    "city": venue.city,
+    "state": venue.state,
+    "address": venue.address,
+    "genres": venue.genres,
+    "phone": venue.phone,
+    "website_link": venue.website_link,
+    "facebook_link": venue.facebook_link,
+    "seeking_talent": venue.seeking_talent,
+    "seeking_description": venue.seeking_description,
+    "image_link": venue.image_link,
+    "past_shows": [{
+      # "artist_id": 0,
+      # "artist_name": "",
+      # "artist_image_link": "",
+      # "start_time": ""
+    }],
+    "upcoming_shows": [],
+    "past_shows_count": 0,
+    "upcoming_shows_count": 0,
+  }
   return render_template('pages/show_venue.html', venue=data)
 
 
