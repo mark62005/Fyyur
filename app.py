@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------#
 
 import json
+from os import abort
 import dateutil.parser
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
@@ -15,6 +16,7 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from sqlalchemy.sql.expression import false
 from forms import *
+import traceback
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -127,32 +129,59 @@ def index():
 #  Venues
 #  ----------------------------------------------------------------
 
+def getDestinctCitiesAndStates() -> list:
+  return db.session.query(Venue.city, Venue.state).distinct(Venue.city, Venue.state).order_by(Venue.state).all()
+
 @app.route('/venues')
-def venues():
+def get_venues() -> str:
   # TODO: replace with real venues data.
   #       num_upcoming_shows should be aggregated based on number of upcoming shows per venue.
-  data=[{
-    "city": "San Francisco",
-    "state": "CA",
-    "venues": [{
-      "id": 1,
-      "name": "The Musical Hop",
-      "num_upcoming_shows": 0,
-    }, {
-      "id": 3,
-      "name": "Park Square Live Music & Coffee",
-      "num_upcoming_shows": 1,
-    }]
-  }, {
-    "city": "New York",
-    "state": "NY",
-    "venues": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
-  }]
-  return render_template('pages/venues.html', areas=data);
+  # data=[{
+  #   "city": "San Francisco",
+  #   "state": "CA",
+  #   "venues": [{
+  #     "id": 1,
+  #     "name": "The Musical Hop",
+  #     "num_upcoming_shows": 0,
+  #   }, {
+  #     "id": 3,
+  #     "name": "Park Square Live Music & Coffee",
+  #     "num_upcoming_shows": 1,
+  #   }]
+  # }, {
+  #   "city": "New York",
+  #   "state": "NY",
+  #   "venues": [{
+  #     "id": 2,
+  #     "name": "The Dueling Pianos Bar",
+  #     "num_upcoming_shows": 0,
+  #   }]
+  # }]
+  try:
+    data = []
+    areas = getDestinctCitiesAndStates()
+    venues = Venue.query.all()
+
+    for area in areas:
+      new_area = {
+        "city": area.city,
+        "state": area.state,
+        "venues": []
+      }
+      for venue in venues:
+        if (area.city == venue.city and area.state == venue.state):
+          venues.append({
+            "id": venue.id,
+            "name": venue.name,
+            "num_upcoming_shows": 0
+          })
+      data.append(new_area)
+
+    return render_template('pages/venues.html', areas=data)
+  except:
+    traceback.print_stack()
+    abort(404)
+
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
