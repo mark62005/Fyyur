@@ -1,1 +1,126 @@
 
+2021-10-31 11:30:26,181 INFO: errors [in /Users/markwong/Desktop/Udacity/Full Stack Web Developer/FSND/projects/01_fyyur/starter_code/app.py:1050]
+2021-10-31 11:31:39,402 ERROR: Exception on /venues/2/edit [GET] [in /opt/homebrew/lib/python3.9/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/Users/markwong/Desktop/Udacity/Full Stack Web Developer/FSND/projects/01_fyyur/starter_code/app.py", line 763, in edit_venue
+    form = VenueForm()
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 208, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 157, in __init__
+    super(Form, self).__init__(*args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 87, in __init__
+    super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 274, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 131, in process
+    field.process(formdata)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/csrf/core.py", line 43, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 139, in generate_csrf_token
+    return generate_csrf(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 33, in generate_csrf
+    secret_key = _get_config(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 128, in _get_config
+    raise RuntimeError(message)
+RuntimeError: A secret key is required to use CSRF.
+2021-10-31 11:33:21,771 ERROR: Exception on /venues/2/edit [GET] [in /opt/homebrew/lib/python3.9/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/Users/markwong/Desktop/Udacity/Full Stack Web Developer/FSND/projects/01_fyyur/starter_code/app.py", line 763, in edit_venue
+    form = VenueForm()
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 208, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 157, in __init__
+    super(Form, self).__init__(*args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 87, in __init__
+    super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 274, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 131, in process
+    field.process(formdata)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/csrf/core.py", line 43, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 139, in generate_csrf_token
+    return generate_csrf(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 33, in generate_csrf
+    secret_key = _get_config(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 128, in _get_config
+    raise RuntimeError(message)
+RuntimeError: A secret key is required to use CSRF.
+2021-10-31 11:33:22,415 ERROR: Exception on /venues/2/edit [GET] [in /opt/homebrew/lib/python3.9/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/Users/markwong/Desktop/Udacity/Full Stack Web Developer/FSND/projects/01_fyyur/starter_code/app.py", line 763, in edit_venue
+    form = VenueForm()
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 208, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 157, in __init__
+    super(Form, self).__init__(*args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 87, in __init__
+    super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 274, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 131, in process
+    field.process(formdata)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/csrf/core.py", line 43, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 139, in generate_csrf_token
+    return generate_csrf(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 33, in generate_csrf
+    secret_key = _get_config(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 128, in _get_config
+    raise RuntimeError(message)
+RuntimeError: A secret key is required to use CSRF.
+2021-10-31 11:33:27,172 ERROR: Exception on /artists/1/edit [GET] [in /opt/homebrew/lib/python3.9/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/opt/homebrew/lib/python3.9/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/Users/markwong/Desktop/Udacity/Full Stack Web Developer/FSND/projects/01_fyyur/starter_code/app.py", line 691, in edit_artist
+    form = ArtistForm(request.form)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 208, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 157, in __init__
+    super(Form, self).__init__(*args, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/form.py", line 87, in __init__
+    super(FlaskForm, self).__init__(formdata=formdata, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 274, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/form.py", line 131, in process
+    field.process(formdata)
+  File "/opt/homebrew/lib/python3.9/site-packages/wtforms/csrf/core.py", line 43, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 139, in generate_csrf_token
+    return generate_csrf(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 33, in generate_csrf
+    secret_key = _get_config(
+  File "/opt/homebrew/lib/python3.9/site-packages/flask_wtf/csrf.py", line 128, in _get_config
+    raise RuntimeError(message)
+RuntimeError: A secret key is required to use CSRF.
