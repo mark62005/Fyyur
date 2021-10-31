@@ -828,7 +828,11 @@ def shows():
       Artist.name, 
       Artist.image_link, 
       Show.starting_time
-    ).join(Venue).join(Artist).all()
+    )\
+    .join(Venue)\
+    .join(Artist)\
+    .order_by(Show.starting_time)\
+    .all()
 
     for show in joined_shows:
       data.append({
