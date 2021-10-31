@@ -16,7 +16,7 @@ from flask_wtf import Form
 from sqlalchemy.sql.elements import or_
 from forms import *
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -935,6 +935,49 @@ def shows():
     abort(404)
 
 
+def isArtistAvailable(artist: Artist, new_start_time: datetime):
+    """
+    Check if an artist is avaible at the start time which user is tyring to book, return True if the artist is available, else False
+    :param artist: the artist that we're checking
+    :param new_start_time: the start time that user trying to book
+    :return: True if the artist is available, else False
+    """
+    for show in artist.shows:
+        booked_start_time = (show.starting_time)
+        booked_end_time = show.starting_time + timedelta(hours=5)
+        if datetime.timestamp(booked_start_time) <= datetime.timestamp(new_start_time) <= datetime.timestamp(booked_end_time):
+            formatted_booked_start_time = booked_start_time.strftime(
+                "%m/%d/%Y at %H:%M:%S")
+            formatted_booked_end_time = booked_end_time.strftime("%H:%M:%S")
+            flash(
+                f"Sorry, {artist.name} will not be available from {formatted_booked_start_time} to {formatted_booked_end_time} , please try another time.")
+            db.session.rollback()
+            db.session.close()
+            return False
+    return True
+
+
+def isVenueAvailable(venue: Venue, new_start_time: datetime):
+    """
+    Check if an venue is avaible at the start time which user is tyring to book, return True if the venue is available, else False
+    :param venue: the venue that we're checking
+    :param new_start_time: the start time that user trying to book
+    :return: True if the venue is available, else False
+    """
+    for show in venue.shows:
+        booked_start_time = show.starting_time
+        booked_end_time = show.starting_time + timedelta(hours=5)
+        if datetime.timestamp(booked_start_time) <= datetime.timestamp(new_start_time) <= datetime.timestamp(booked_end_time):
+            formatted_booked_start_time = booked_start_time.strftime(
+                "%m/%d/%Y at %H:%M:%S")
+            formatted_booked_end_time = booked_end_time.strftime("%H:%M:%S")
+            flash(
+                f"Sorry, {venue.name} is already booked from {formatted_booked_start_time} to {formatted_booked_end_time} , please try another time.")
+            db.session.rollback()
+            db.session.close()
+            return False
+    return True
+
 @app.route('/shows/create')
 def create_shows():
   # renders form. do not touch.
@@ -948,32 +991,41 @@ def create_show_submission():
   error = False
   form = ShowForm(request.form)
 
-  show = Show(
-    artist_id = form.artist_id.data,
-    venue_id = form.venue_id.data,
-    starting_time = form.start_time.data,
-  )
+  new_start_time = form.start_time.data
+  artist = Artist.query.filter(Artist.id == form.artist_id.data).one_or_none()
+  venue = Venue.query.filter(Venue.id == form.venue_id.data).one_or_none()
 
-  try:
-    db.session.add(show)
-    db.session.commit()
-    # on successful db insert, flash success
-    flash(f'Show {show.id} was successfully listed!')
-  except:
-    # TODO: on unsuccessful db insert, flash an error instead.
-    # e.g., flash('An error occurred. Show could not be listed.')
-    # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
-    error = True
-    db.session.rollback()
-    traceback.print_stack()
-    flash('An error occurred. Show could not be listed.')
-  finally:
-    db.session.close()
+  if artist is None or venue is None:
+    abort(404)
 
-  if error:
-    abort(422)
+  # try:
+  if isArtistAvailable(artist, new_start_time) and isVenueAvailable(venue, new_start_time):
+      show = Show(
+        artist_id = form.artist_id.data,
+        venue_id = form.venue_id.data,
+        starting_time = form.start_time.data,
+      )
+      db.session.add(show)
+      db.session.commit()
+      # on successful db insert, flash success
+      flash('Show was successfully listed!')
   else:
-    return render_template('pages/home.html')
+      return redirect(url_for("create_shows"))
+  # except:
+  #   # TODO: on unsuccessful db insert, flash an error instead.
+  #   # e.g., flash('An error occurred. Show could not be listed.')
+  #   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
+  #   error = True
+  #   db.session.rollback()
+  #   traceback.print_stack()
+  #   flash('An error occurred. Show could not be listed.')
+  # finally:
+  #   db.session.close()
+
+  # if error:
+  #   abort(422)
+  # else:
+  #   return render_template('pages/home.html')
 
 
 @app.errorhandler(404)
