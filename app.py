@@ -535,6 +535,34 @@ def show_artist(artist_id):
   return render_template('pages/show_artist.html', artist=data)
 
 
+#  Delete Artist
+#  ----------------------------------------------------------------
+@app.route('/artists/<artist_id>', methods=['POST'])
+def delete_artist(artist_id):
+  error = False
+  artist = Artist.query.filter(Artist.id == artist_id).one_or_none()
+
+  if artist is None:
+    abort(404)
+
+  try:
+    db.session.delete(artist)
+    db.session.commit()
+    flash(f"{artist.name} has been deleted successfully.")
+  except:
+    error = True
+    db.session.rollback()
+    traceback.print_stack()
+    flash("Something went wrong!")
+  finally:
+    db.session.close()
+  
+  if error:
+    return redirect(url_for("show_artist", artist_id = artist_id))
+  else:
+    return redirect(url_for("index"))
+
+
 #  Update
 #  ----------------------------------------------------------------
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])

@@ -73,6 +73,15 @@
 </section>
 
 <a href="/artists/{{ artist.id }}/edit"><button class="btn btn-primary btn-lg">Edit</button></a>
+<form>
+	<input 
+		type="submit"
+		value="Delete Artist"
+		class="btn btn-warning btn-lg btn-inline-block"
+		formmethod="POST"
+		formaction="{{ url_for('delete_artist', artist_id=artist.id) }}" 
+	/>
+</form>
 
 {% endblock %}
 
