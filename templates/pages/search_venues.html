@@ -1,17 +1,44 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Fyyur | Venues Search{% endblock %}
 {% block content %}
-<h3>Number of search results for "{{ search_term }}": {{ results.count }}</h3>
-<ul class="items">
-	{% for venue in results.data %}
-	<li>
-		<a href="/venues/{{ venue.id }}">
-			<i class="fas fa-music"></i>
-			<div class="item">
-				<h5>{{ venue.name }}</h5>
-			</div>
-		</a>
-	</li>
-	{% endfor %}
-</ul>
+<div class="search-by-name">
+	<h2>Search by name:</h2>
+	<h3>Number of search results for "{{ search_term }}": {{ searched_by_name.count }}</h3>
+	<ul class="items">
+		{% for venue in searched_by_name.data %}
+		<li>
+			<a href="/venues/{{ venue.id }}">
+				<i class="fas fa-music"></i>
+				<div class="item">
+					<h5>{{ venue.name }}</h5>
+				</div>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+<div class="search-by-city-and-state">
+	<h2>Search by city and state:</h2>
+	<h3>Number of search results for "{{ search_term }}": {{ searched_by_city_state.count }}</h3>
+	
+	<ul class="categories">
+		{% for area in searched_by_city_state.data %}
+		<li class="city-state">
+			<h4>{{ area.city }}, {{ area.state }}</h4>
+			<ul class="items">
+				{% for venue in area.venues %}
+				<li>
+					<a href="/venues/{{ venue.id }}">
+						<i class="fas fa-music"></i>
+						<div class="item">
+							<h5>{{ venue.name }}</h5>
+						</div>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
 {% endblock %}

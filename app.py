@@ -13,8 +13,10 @@ from flask_migrate import Migrate
 import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
+from sqlalchemy.sql.elements import or_
 from forms import *
 import traceback
+from datetime import datetime
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -201,20 +203,87 @@ def get_venues() -> str:
     abort(404)
 
 
+def count_num_upcoming_shows(venue: Venue) -> int:
+    count = 0
+    now = datetime.timestamp(datetime.now())
+    for show in venue.shows:
+      if (datetime.timestamp(show.starting_time) > now):
+        count += 1
+
+    return count
+
+
+def search_venues_by_name(search_term: str) -> object:
+    venues_by_name = Venue.query.filter(
+        Venue.name.ilike(f"%{search_term}%")).all()
+    searched_by_name = {
+        "count": len(venues_by_name),
+        "data": []
+    }
+    for venue in venues_by_name:
+        searched_by_name["data"].append({
+            "id": venue.id,
+            "name": venue.name,
+            "num_upcoming_shows": count_num_upcoming_shows(venue)
+        })
+    return searched_by_name
+
+
+def search_venues_by_city_and_state(search_term: str):
+    areas = db.session.query(Venue.city, Venue.state)\
+        .distinct("city", "state")\
+        .filter(or_(
+                Venue.city.ilike(f"%{search_term}%"),
+                Venue.state.ilike(f"%{search_term}%"))).all()
+    venues_by_city_state = Venue.query.filter(or_(
+        Venue.city.ilike(f"%{search_term}%"),
+        Venue.state.ilike(f"%{search_term}%"))).all()
+    searched_by_city_state = {
+        "count": len(venues_by_city_state),
+        "data": []
+    }
+
+    for area in areas:
+        new_area = {
+            "city": area.city,
+            "state": area.state,
+            "venues": []
+        }
+        for venue_by_city_state in venues_by_city_state:
+            if (area.city == venue_by_city_state.city and area.state == venue_by_city_state.state):
+                new_area["venues"].append({
+                    "id": venue_by_city_state.id,
+                    "name": venue_by_city_state.name,
+                    "num_upcoming_shows": count_num_upcoming_shows(venue_by_city_state)
+                })
+        searched_by_city_state["data"].append(new_area)
+    return searched_by_city_state
+
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
   # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
   # seach for Hop should return "The Musical Hop".
   # search for "Music" should return "The Musical Hop" and "Park Square Live Music & Coffee"
-  response={
-    "count": 1,
-    "data": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
-  }
-  return render_template('pages/search_venues.html', results=response, search_term=request.form.get('search_term', ''))
+  # response={
+  #   "count": 1,
+  #   "data": [{
+  #     "id": 2,
+  #     "name": "The Dueling Pianos Bar",
+  #     "num_upcoming_shows": 0,
+  #   }]
+  # }
+  # try:
+  search_term = request.form.get('search_term', '')
+
+  searched_by_name = search_venues_by_name(search_term)
+  searched_by_city_state = search_venues_by_city_and_state(search_term)
+
+  return render_template('pages/search_venues.html',
+                          searched_by_name=searched_by_name,
+                          searched_by_city_state=searched_by_city_state,
+                          search_term=search_term)
+  # except:
+  #   abort(404)
 
 
 @app.route('/venues/<int:venue_id>')
